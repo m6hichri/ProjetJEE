@@ -19,9 +19,4 @@ public class CategoryController {
         return categoryService.getCategories();
     }
 
- /*  @PostMapping("/comment/{creator}")
-    //@PreAuthorize("#author==authentication.name")
-    public CommentDto addC(@RequestBody AddCommentDto addC, @PathVariable("creator") String author) {
-        return forumService.addC(addC, author);
-    }*/
 }

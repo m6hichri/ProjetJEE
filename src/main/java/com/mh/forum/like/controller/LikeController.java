@@ -1,16 +1,7 @@
 package com.mh.forum.like.controller;
 
 
-import com.mh.forum.category.model.Category;
-import com.mh.forum.comment.dto.AddCommentDto;
-import com.mh.forum.comment.dto.CommentDto;
-import com.mh.forum.post.dto.AddPostDto;
-import com.mh.forum.post.dto.PostDto;
-import com.mh.forum.post.services.ForumService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/forum")

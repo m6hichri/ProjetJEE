@@ -1,6 +1,6 @@
 package com.mh.forum.transactions.controller;
 
-import com.mh.forum.post.services.ForumService;
+import com.mh.forum.post.services.PostService;
 import com.mh.forum.transactions.model.Order;
 import com.mh.forum.transactions.services.PaypalService;
 import com.paypal.api.payments.Links;
@@ -18,7 +18,7 @@ import java.util.List;
 public class PaypalController {
 
     @Autowired
-    ForumService forumService;
+    PostService postService;
     @Autowired
     PaypalService service;
 
@@ -34,7 +34,7 @@ public class PaypalController {
     @PostMapping("/pay/{idPost}")
     public String payment(@RequestBody Order order,@PathVariable String idPost) {
         try {
-            System.out.println("*************get post par id***********"+ forumService.addCollectes(idPost,order.getPrice()));
+            System.out.println("*************get post par id***********"+ postService.addCollectes(idPost,order.getPrice()));
             Payment payment = service.createPayment(
                     order.getPrice(),
                     order.getCurrency(),

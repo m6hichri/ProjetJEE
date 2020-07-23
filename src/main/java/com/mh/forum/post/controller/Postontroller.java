@@ -4,7 +4,7 @@ import com.mh.forum.comment.dto.AddCommentDto;
 import com.mh.forum.configuration.UserConfig;
 import com.mh.forum.post.dto.AddPostDto;
 import com.mh.forum.post.dto.PostDto;
-import com.mh.forum.post.services.ForumService;
+import com.mh.forum.post.services.PostService;
 import com.mh.forum.user.dto.UserDto;
 import com.mh.forum.user.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/forum")
-public class ForumController {
+public class Postontroller {
     @Autowired
-    ForumService forumService;
+    PostService postService;
 
     @Autowired
     UserService userService;
@@ -29,7 +29,7 @@ public class ForumController {
         UserDto userDto = userService.findUserByToken(userConfig.extractToken(token));
         if (null != userDto) {
             return new ResponseEntity<PostDto>(
-                    forumService.addPost(
+                    postService.addPost(
                             addPost,
                             userDto.getEmail(),
                             userDto.getIdUser()
@@ -45,7 +45,7 @@ public class ForumController {
         UserDto userDto = userService.findUserByToken(userConfig.extractToken(token));
         if (null != userDto) {
             return new ResponseEntity<PostDto>(
-                    forumService.addComment(
+                    postService.addComment(
                             id,
                             addCommentDto,
                             userDto.getEmail(),
@@ -60,19 +60,19 @@ public class ForumController {
 
     @GetMapping("/post/{id}")
     public ResponseEntity<PostDto> getPost(@PathVariable String id) {
-        return new ResponseEntity<PostDto>(forumService.getPost(id), HttpStatus.OK);
+        return new ResponseEntity<PostDto>(postService.getPost(id), HttpStatus.OK);
     }
 
     @GetMapping("/posts")
     public ResponseEntity<Iterable<PostDto>> getPosts() {
-        return new ResponseEntity<Iterable<PostDto>>(forumService.getPosts(), HttpStatus.OK);
+        return new ResponseEntity<Iterable<PostDto>>(postService.getPosts(), HttpStatus.OK);
     }
 
     @DeleteMapping("/post/{id}")
     public ResponseEntity<PostDto> deletePost(@PathVariable String id, @RequestHeader("Authorization") String token) {
         UserDto userDto = userService.findUserByToken(userConfig.extractToken(token));
         if (null != userDto) {
-            return new ResponseEntity<PostDto>(forumService.deletePost(id), HttpStatus.OK);
+            return new ResponseEntity<PostDto>(postService.deletePost(id), HttpStatus.OK);
         }
         return new ResponseEntity<PostDto>((PostDto) null, HttpStatus.UNAUTHORIZED);
     }
@@ -81,7 +81,7 @@ public class ForumController {
     public ResponseEntity<PostDto> updatePost(@RequestBody AddPostDto postUpdateDto, @PathVariable String id, @RequestHeader("Authorization") String token) {
         UserDto userDto = userService.findUserByToken(userConfig.extractToken(token));
         if (null != userDto) {
-            return new ResponseEntity<PostDto>(forumService.updatePost(postUpdateDto, id), HttpStatus.OK);
+            return new ResponseEntity<PostDto>(postService.updatePost(postUpdateDto, id), HttpStatus.OK);
         }
         return new ResponseEntity<PostDto>((PostDto) null, HttpStatus.UNAUTHORIZED);
     }
@@ -90,7 +90,7 @@ public class ForumController {
     public ResponseEntity<Boolean> addLike(@PathVariable String idPost, @RequestHeader("Authorization") String token) {
         UserDto userDto = userService.findUserByToken(userConfig.extractToken(token));
         if (null != userDto) {
-            return new ResponseEntity<Boolean>(forumService.addLike(idPost, userDto.getIdUser()), HttpStatus.OK);
+            return new ResponseEntity<Boolean>(postService.addLike(idPost, userDto.getIdUser()), HttpStatus.OK);
         }
         return new ResponseEntity<Boolean>(false, HttpStatus.UNAUTHORIZED);
     }
@@ -99,7 +99,7 @@ public class ForumController {
     public ResponseEntity<Boolean> dislike(@PathVariable String id, @RequestHeader("Authorization") String token) {
         UserDto userDto = userService.findUserByToken(userConfig.extractToken(token));
         if (null != userDto) {
-            return new ResponseEntity<Boolean>(forumService.dislike(id), HttpStatus.OK);
+            return new ResponseEntity<Boolean>(postService.dislike(id), HttpStatus.OK);
         }
         return new ResponseEntity<Boolean>(false, HttpStatus.UNAUTHORIZED);
     }
@@ -108,20 +108,20 @@ public class ForumController {
     public ResponseEntity<Iterable<PostDto>> findPostsByCreator(@RequestHeader("Authorization") String token) {
         UserDto userDto = userService.findUserByToken(userConfig.extractToken(token));
         if (null != userDto) {
-            return new ResponseEntity<Iterable<PostDto>>(forumService.getPostsByUser(userDto.getIdUser()), HttpStatus.OK);
+            return new ResponseEntity<Iterable<PostDto>>(postService.getPostsByUser(userDto.getIdUser()), HttpStatus.OK);
         }
         return new ResponseEntity<Iterable<PostDto>>((Iterable<PostDto>) null, HttpStatus.FORBIDDEN);
     }
 
     @GetMapping("/posts/category/{category}")
     public ResponseEntity<Iterable<PostDto>> findPostsByCategory(@PathVariable String category) {
-        return new ResponseEntity<Iterable<PostDto>>(forumService.getPostsByCategory(category), HttpStatus.OK);
+        return new ResponseEntity<Iterable<PostDto>>(postService.getPostsByCategory(category), HttpStatus.OK);
     }
 
 
     @GetMapping("/post/{id}/likes")
     public ResponseEntity<Integer> getLikesByPost(@PathVariable String id) {
-        return new ResponseEntity<Integer>(forumService.getLikesByPost(id), HttpStatus.OK);
+        return new ResponseEntity<Integer>(postService.getLikesByPost(id), HttpStatus.OK);
     }
 
 }

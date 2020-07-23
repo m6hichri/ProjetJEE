@@ -1,43 +1,36 @@
 package com.mh.forum.post.services;
-
-import com.mh.forum.category.dao.CategoryRepository;
-import com.mh.forum.category.model.Category;
-import com.mh.forum.comment.dao.CommentRepositry;
+import com.mh.forum.category.dao.MongoCategoryRepository;
 import com.mh.forum.comment.dto.AddCommentDto;
 import com.mh.forum.comment.dto.CommentDto;
 import com.mh.forum.comment.model.Comment;
 import com.mh.forum.exceptions.PostNotFoundException;
-import com.mh.forum.like.dao.LikeRepository;
 import com.mh.forum.like.dto.LikeDto;
 import com.mh.forum.like.model.Like;
-import com.mh.forum.post.dao.ForumRepository;
+import com.mh.forum.post.dao.MongoPostRepository;
 import com.mh.forum.post.dto.AddPostDto;
 import com.mh.forum.post.dto.PostDto;
 import com.mh.forum.post.model.Post;
-import com.mh.forum.user.dao.UserRepository;
-import com.mh.forum.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 
 @Service
-public class ForumServiceImpl implements ForumService {
+public class PostServiceImpl implements PostService {
 
 
     @Autowired
-    ForumRepository forumRepository;
+    MongoPostRepository mongoPostRepository;
+    //    @Autowired
+//    CommentRepositry commentRepositry;
     @Autowired
-    CommentRepositry commentRepositry;
-    @Autowired
-    CategoryRepository categoryRepository;
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    LikeRepository likeRepository;
+    MongoCategoryRepository mongoCategoryRepository;
+//    @Autowired
+//    UserRepository userRepository;
+//    @Autowired
+//    LikeRepository likeRepository;
 
 
     @Override
@@ -48,51 +41,51 @@ public class ForumServiceImpl implements ForumService {
                 creator,
                 idUser);
         //Post post = new Post(creator,idUser, addPostDto.getSubject(), addPostDto.getContent(), addPostDto.getCategory(), addPostDto.getName());
-        post = forumRepository.save(post);
-        return convertToPostDto(post);
-    }
-
-    @Override
-    public PostDto addCollectes(String id, double collect) {
-        Post post = forumRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
-        post.addCollect(collect);
-        forumRepository.save(post);
+        post = mongoPostRepository.save(post);
         return convertToPostDto(post);
     }
 
     @Override
     public PostDto addComment(String id, AddCommentDto addCommentDto, String creator, String idUser, String owner) {
-        Post post = forumRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
+        Post post = mongoPostRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
         Comment comment = new Comment(idUser, creator, addCommentDto.getContent(), owner);
         System.out.println("*************comment in service ***********" + comment);
         post.addComment(comment);
-        forumRepository.save(post);
+        mongoPostRepository.save(post);
+        return convertToPostDto(post);
+    }
+
+    @Override
+    public PostDto addCollectes(String id, double collect) {
+        Post post = mongoPostRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
+        post.addCollect(collect);
+        mongoPostRepository.save(post);
         return convertToPostDto(post);
     }
 
     @Override
     public PostDto getPost(String id) {
-        Post post = forumRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
+        Post post = mongoPostRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
         return convertToPostDto(post);
     }
 
     @Override
     public Iterable<PostDto> getPostsByUser(String creator) {
-        return forumRepository.findPostsByIdUser(creator)
+        return mongoPostRepository.findPostsByIdUser(creator)
                 .map(this::convertToPostDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public Iterable<PostDto> getPostsByCategory(String category) {
-        return forumRepository.findPostsByCategory(category)
+        return mongoPostRepository.findPostsByCategory(category)
                 .map(this::convertToPostDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public Iterable<PostDto> getPosts() {
-        return forumRepository.findAllByOrderByDateCreateDesc()
+        return mongoPostRepository.findAllByOrderByDateCreateDesc()
                 .map(this::convertToPostDto)
                 .collect(Collectors.toList());
     }
@@ -100,35 +93,28 @@ public class ForumServiceImpl implements ForumService {
 
     @Override
     public Iterable<CommentDto> getCommentsByPost(String id) {
-        Post post = forumRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
+        Post post = mongoPostRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
         Set<Comment> comments = post.getComments();
         return comments.stream().map(this::convertToCommentDto).collect(Collectors.toList());
     }
 
     @Override
-    public Iterable<CommentDto> getCommentsByUser(String idUser) {
-        return commentRepositry.findCommentByIdUser(idUser)
-                .map(this::convertToCommentDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public int getLikesByPost(String id) {
-        Post post = forumRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
+        Post post = mongoPostRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
         int likes = post.getLikesCount();
         return likes;
     }
 
     @Override
     public PostDto deletePost(String id) {
-        Post post = forumRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
-        forumRepository.delete(post);
+        Post post = mongoPostRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
+        mongoPostRepository.delete(post);
         return convertToPostDto(post);
     }
 
     @Override
     public PostDto updatePost(AddPostDto updatePostDto, String id) {
-        Post post = forumRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
+        Post post = mongoPostRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
         String content = updatePostDto.getContent();
 
         if (null != content) {
@@ -138,51 +124,42 @@ public class ForumServiceImpl implements ForumService {
         if (null != content) {
             post.setSubject(subject);
         }
-        forumRepository.save(post);
+        mongoPostRepository.save(post);
         return convertToPostDto(post);
     }
 
     @Override
     public boolean addLike(String idPost, String idUser) {
-        User user = userRepository.findById(idUser).orElse(null);
-        Post post = forumRepository.findById(idPost).orElse(null);
+//        User user = userRepository.findById(idUser).orElse(null);
+        Post post = mongoPostRepository.findById(idPost).orElse(null);
         List<Like> likes = post.getLikes();
         if (!likes.isEmpty()) {
             for (int i = 0; i < likes.size(); i++) {
-                if (likes.get(i).getUser().getIdUser().equals(user.getIdUser())) {
+                if (likes.get(i).getIdUser().equals(idUser)) {
                     return false;
                 }
             }
         }
-        Like like = new Like(user);
-        likeRepository.save(like);//save like
+        Like like = new Like(idUser);
+//        likeRepository.save(like);//save like
         post.addLike();// increment likesCount
         post.addLikes(like);// add like to this post
-        forumRepository.save(post);//save post
+        mongoPostRepository.save(post);//save post
         return true;
     }
+
 
     @Override
     public boolean dislike(String id) {
 
-        Post post = forumRepository.findById(id).orElse(null);
+        Post post = mongoPostRepository.findById(id).orElse(null);
         if (null != post) {
             post.dislike();
-            forumRepository.save(post);
+            mongoPostRepository.save(post);
             return true;
         }
         return false;
     }
-    /*@Override
-    public Category addCategory(Category category) {
-        return categoryRepository.save(category);
-    }*/
-
-    @Override
-    public List<Category> getCategories() {
-        return categoryRepository.findAll();
-    }
-
 
     private PostDto convertToPostDto(Post post) {
         return PostDto.builder()
@@ -205,7 +182,7 @@ public class ForumServiceImpl implements ForumService {
     }
 
     private LikeDto convertToLikeDto(Like like) {
-        return LikeDto.builder().user(like.getUser()).build();
+        return LikeDto.builder().idUser(like.getIdUser()).build();
     }
 
 }

@@ -1,8 +1,8 @@
 package com.mh.forum.transactions.services;
 
-import com.mh.forum.transactions.dao.CreditorRepository;
-import com.mh.forum.transactions.dao.DealingRepository;
-import com.mh.forum.transactions.dao.DebtorRepository;
+import com.mh.forum.transactions.dao.MongoCreditorRepository;
+import com.mh.forum.transactions.dao.MongoDealingRepository;
+import com.mh.forum.transactions.dao.MongoDebtorRepository;
 import com.mh.forum.transactions.model.Creditor;
 import com.mh.forum.transactions.model.Dealing;
 import com.mh.forum.transactions.model.Debtor;
@@ -24,12 +24,12 @@ public class PaypalService {
     @Autowired
     private APIContext apiContext;
 	@Autowired
-	private DebtorRepository debtorRepository;
+	private MongoDebtorRepository mongoDebtorRepository;
     @Autowired
-    private CreditorRepository creditorRepository;
+    private MongoCreditorRepository mongoCreditorRepository;
 
     @Autowired
-    DealingRepository dealingRepository;
+    MongoDealingRepository mongoDealingRepository;
 
     public Payment createPayment(Double total, String currency, String cancelUrl, String successUrl) throws PayPalRESTException {
         Amount amount = new Amount();
@@ -82,7 +82,7 @@ public class PaypalService {
         Sum sum = new Sum(amount.getCurrency(),amount.getTotal());
 
         Dealing dealing = new Dealing(debtor,creditor, payment.execute(apiContext, paymentExecute).getCreateTime(),sum);
-        dealingRepository.save(dealing);
+        mongoDealingRepository.save(dealing);
 
 		return payment.execute(apiContext, paymentExecute);
     }

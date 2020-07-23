@@ -1,6 +1,4 @@
 package com.mh.forum.comment.controller;
-
-
 import com.mh.forum.comment.dto.CommentDto;
 import com.mh.forum.comment.services.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +21,4 @@ public class CommentController {
     }
 
 
- /*  @PostMapping("/comment/{creator}")
-    //@PreAuthorize("#author==authentication.name")
-    public CommentDto addC(@RequestBody AddCommentDto addC, @PathVariable("creator") String author) {
-        return forumService.addC(addC, author);
-    }*/
 }

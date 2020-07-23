@@ -7,7 +7,7 @@ import com.mh.forum.exceptions.ForbiddenException;
 import com.mh.forum.exceptions.UserAuthenticationException;
 import com.mh.forum.exceptions.UserExistsException;
 import com.mh.forum.exceptions.UserNotFoundException;
-import com.mh.forum.user.dao.UserRepository;
+import com.mh.forum.user.dao.MongoUserRepository;
 import com.mh.forum.user.dto.AddUserDto;
 import com.mh.forum.user.dto.PasswordDto;
 import com.mh.forum.user.dto.UserDto;
@@ -22,16 +22,15 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    UserRepository userRepository;
+    MongoUserRepository mongoUserRepository;
     @Autowired
     UserConfig userConfig;
-   /* @Autowired
-    PasswordEncoder passwordEncoder;*/
+
 
     @Override
     public UserDto addUser(AddUserDto addUserDto) throws NoSuchAlgorithmException {
         //to correct
-        if (userRepository.existsById(addUserDto.getEmail())){
+        if (mongoUserRepository.existsById(addUserDto.getEmail())){
             throw new UserExistsException();
         }
         String token = UUID.randomUUID().toString() + Md5Hash.hashThis(addUserDto.getPassword());
@@ -42,7 +41,7 @@ public class UserServiceImpl implements UserService {
                 .lastName(addUserDto.getLastName())
                 .token(token)
                 .build();
-        userRepository.save(user);
+        mongoUserRepository.save(user);
         return userToUserDto(user);
     }
 
@@ -51,7 +50,7 @@ public class UserServiceImpl implements UserService {
         UserAuthentication userAuthentication = userConfig.tokenDecode(token);
 
         //User user = userRepository.findById(userAuthentication.getEmail()).orElseThrow(() -> new UserAuthenticationException());
-        User user = userRepository.findUserByEmail(userAuthentication.getEmail());
+        User user = mongoUserRepository.findUserByEmail(userAuthentication.getEmail());
         if (null == user) {
             throw new UserAuthenticationException();
         }
@@ -63,14 +62,14 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserDto updateUser(UserDto userChange, String token) {
-        User user = userRepository.findUserByToken(token);
+        User user = mongoUserRepository.findUserByToken(token);
         if (null == user) {
             throw new UserNotFoundException();
         }
         user.setEmail(userChange.getEmail());
         user.setFirstName(userChange.getFirstName());
         user.setLastName(userChange.getLastName());
-        userRepository.save(user);
+        mongoUserRepository.save(user);
         return userToUserDto(user);
     }
 
@@ -91,17 +90,17 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserDto updateUserPassword(PasswordDto newPassword, String token) {
-        User user = userRepository.findUserByToken(token);
+        User user = mongoUserRepository.findUserByToken(token);
         if (null == user) {
             return null;
         }
         user.setPassword(newPassword.getPassword());
-        userRepository.save(user);
+        mongoUserRepository.save(user);
         return userToUserDto(user);
     }
 
     public UserDto findUserByToken(String token) {
-        User user = userRepository.findUserByToken(token);
+        User user = mongoUserRepository.findUserByToken(token);
         return userToUserDto(user);
     }
 }

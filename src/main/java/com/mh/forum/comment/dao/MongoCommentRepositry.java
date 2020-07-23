@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.stream.Stream;
 
-public interface CommentRepositry extends MongoRepository<Comment, String> {
+public interface MongoCommentRepositry extends MongoRepository<Comment, String> {
 
     //Stream<Comment> findCommentByUserEmail(String user);
     Stream<Comment> findCommentByIdUser(String user);

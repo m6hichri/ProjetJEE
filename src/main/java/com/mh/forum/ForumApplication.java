@@ -1,10 +1,7 @@
 package com.mh.forum;
 
-import com.mh.forum.category.dao.CategoryRepository;
-import com.mh.forum.category.model.Category;
-import com.mh.forum.user.dao.UserRepository;
+import com.mh.forum.user.dao.MongoUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -13,16 +10,14 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 //import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 @SpringBootApplication
 public class ForumApplication {
 
     @Autowired
-    UserRepository userRepository;
+    MongoUserRepository mongoUserRepository;
 
    /* @Autowired
     PasswordEncoder passwordEncoder;*/
