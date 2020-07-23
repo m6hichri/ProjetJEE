@@ -1,14 +1,12 @@
-package com.mh.forum.post.dto;
+package com.mh.forum.post.infrastructure.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.mh.forum.comment.dto.CommentDto;
 import com.mh.forum.like.dto.LikeDto;
-import com.mh.forum.like.model.Like;
 import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 
 @NoArgsConstructor

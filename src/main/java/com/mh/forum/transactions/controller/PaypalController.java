@@ -1,6 +1,6 @@
 package com.mh.forum.transactions.controller;
 
-import com.mh.forum.post.services.PostService;
+import com.mh.forum.post.use_case.PostService;
 import com.mh.forum.transactions.model.Order;
 import com.mh.forum.transactions.services.PaypalService;
 import com.paypal.api.payments.Links;

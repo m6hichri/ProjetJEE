@@ -1,10 +1,12 @@
-package com.mh.forum.post.controller;
+package com.mh.forum.post.infrastructure.controller;
 
 import com.mh.forum.comment.dto.AddCommentDto;
 import com.mh.forum.configuration.UserConfig;
-import com.mh.forum.post.dto.AddPostDto;
-import com.mh.forum.post.dto.PostDto;
-import com.mh.forum.post.services.PostService;
+import com.mh.forum.post.infrastructure.dto.AddPostDto;
+import com.mh.forum.post.infrastructure.dto.PostDto;
+import com.mh.forum.post.model.Post;
+import com.mh.forum.post.use_case.CreerPost;
+import com.mh.forum.post.use_case.PostService;
 import com.mh.forum.user.dto.UserDto;
 import com.mh.forum.user.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,9 @@ public class Postontroller {
     PostService postService;
 
     @Autowired
+    CreerPost creerPost;
+
+    @Autowired
     UserService userService;
 
     @Autowired
@@ -29,8 +34,8 @@ public class Postontroller {
         UserDto userDto = userService.findUserByToken(userConfig.extractToken(token));
         if (null != userDto) {
             return new ResponseEntity<PostDto>(
-                    postService.addPost(
-                            addPost,
+                    creerPost.execute(
+                            new Post(addPost.getSubject(), ...),
                             userDto.getEmail(),
                             userDto.getIdUser()
                     ),

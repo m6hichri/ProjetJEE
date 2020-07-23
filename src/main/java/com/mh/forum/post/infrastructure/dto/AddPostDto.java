@@ -1,4 +1,4 @@
-package com.mh.forum.post.dto;
+package com.mh.forum.post.infrastructure.dto;
 
 import lombok.Getter;
 

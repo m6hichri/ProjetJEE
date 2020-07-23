@@ -1,9 +1,9 @@
-package com.mh.forum.post.services;
+package com.mh.forum.post.use_case;
 
 import com.mh.forum.comment.dto.AddCommentDto;
 import com.mh.forum.comment.dto.CommentDto;
-import com.mh.forum.post.dto.AddPostDto;
-import com.mh.forum.post.dto.PostDto;
+import com.mh.forum.post.infrastructure.dto.AddPostDto;
+import com.mh.forum.post.infrastructure.dto.PostDto;
 
 public interface PostService {
 

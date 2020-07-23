@@ -1,10 +1,6 @@
 package com.mh.forum.comment.services;
 
-import com.mh.forum.comment.dto.AddCommentDto;
 import com.mh.forum.comment.dto.CommentDto;
-import com.mh.forum.post.dto.PostDto;
-
-import java.util.List;
 
 
 public interface CommentService {

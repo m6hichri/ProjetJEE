@@ -5,9 +5,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.mh.forum.comment.model.Comment;
 import com.mh.forum.like.model.Like;
 import lombok.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,9 +17,7 @@ import java.util.Set;
 @NoArgsConstructor
 @ToString
 @Builder
-@Document(collection = "posts")
 public class Post {
-    @Id
     String idPost;
     String idUser;
     @Setter
