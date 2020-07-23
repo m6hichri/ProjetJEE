@@ -25,8 +25,8 @@ public class PostServiceImpl implements PostService {
     MongoPostRepository mongoPostRepository;
     //    @Autowired
 //    CommentRepositry commentRepositry;
-    @Autowired
-    MongoCategoryRepository mongoCategoryRepository;
+//    @Autowired
+//    MongoCategoryRepository mongoCategoryRepository;
 //    @Autowired
 //    UserRepository userRepository;
 //    @Autowired

@@ -26,7 +26,6 @@ public class PostDto {
     Integer likesCount;
     @Singular
     List<CommentDto> comments;
-    //Set<Like> likes;
     List<LikeDto> likes;
     String category;
     double collectes;

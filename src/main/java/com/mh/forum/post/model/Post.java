@@ -35,7 +35,6 @@ public class Post {
     LocalDateTime dateCreate;
     int likesCount;
     Set<Comment> comments;
-    //Set<Like> likes;
     List<Like> likes;
     @Setter
     String category;
@@ -50,18 +49,16 @@ public class Post {
         this.dateCreate = LocalDateTime.now();
         comments = new HashSet<Comment>(0);
         likes = new ArrayList<Like>();
-        //likes = new HashSet<Like>(0);
         this.category = category;
         collectes = 0.0;
 
     }
 
-
-
     public double addCollect(double collectes) {
 
         return this.collectes += collectes;
     }
+
     public void addLike() {
         likesCount++;
     }
