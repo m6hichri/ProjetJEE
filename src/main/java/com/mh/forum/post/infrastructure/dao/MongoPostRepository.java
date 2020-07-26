@@ -1,6 +1,7 @@
 package com.mh.forum.post.infrastructure.dao;
 
 
+import com.mh.forum.post.adaptateur.PostAdaptateur;
 import com.mh.forum.post.model.Post;
 import com.mh.forum.post.model.PostRepository;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -20,8 +21,9 @@ public class MongoPostRepository implements PostRepository {
 
     @Override
     public Post save(Post post) {
-        mongoTemplate.save(post);
-        return null;
+        MongoPost mp = mongoTemplate.save(PostAdaptateur.postToMongoPostBDT(post));
+        Post newPost = PostAdaptateur.mongoPostToPost(mp);
+        return newPost;
     }
 
     @Override

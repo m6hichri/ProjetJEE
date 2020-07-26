@@ -46,7 +46,18 @@ public class Post {
         likes = new ArrayList<Like>();
         this.category = category;
         collectes = 0.0;
+    }
 
+    public Post(String subject, String content, String category, String creator, String idUser, LocalDateTime dateCreate) {
+        this.idUser = idUser;
+        this.subject = subject;
+        this.content = content;
+        this.creator = creator;
+        this.dateCreate =  dateCreate;
+        comments = new HashSet<Comment>(0);
+        likes = new ArrayList<Like>();
+        this.category = category;
+        collectes = 0.0;
     }
 
     public double addCollect(double collectes) {

@@ -42,9 +42,12 @@ class MongoPostRepositoryITest {
             final String creator = "creator";
             final String idUser = "idUser";
 
+            System.out.println("Salut");
+
+
             post = new Post(subject, content, category, creator, idUser);
 
-            mongoPost = new MongoPost(subject, content, category, creator, idUser);
+            mongoPost = new MongoPost(subject, content, category, creator, idUser, post.getDateCreate());
 
             when(mongoTemplate.save(any())).thenReturn(mongoPost);
         }
@@ -53,7 +56,6 @@ class MongoPostRepositoryITest {
         public void return_added_user() {
             // when
             final Post result = mongoPostRepository.save(post);
-
             // then
             assertThat(result).isEqualToComparingFieldByField(post);
         }
